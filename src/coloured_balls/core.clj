@@ -1,5 +1,7 @@
 (ns coloured-balls.core
-  (:use [rosado.processing]
+  (:use 
+        [coloured-balls.motion]
+        [rosado.processing]
         [rosado.processing.applet])
   (:gen-class))
 
@@ -19,16 +21,7 @@
 (defn make-ball []
 	{:x 200 :y 200 :red 250 :blue 150 :green 256 :radius 45 :vx 2 :vy 2})
 
-(defn move-dimension [dim vel ball]
-  (assoc ball dim (+ (dim ball) (vel ball))))
-
-(defn move-ball [ball]
-  ( (comp
-   (partial move-dimension :x :vx)
-   (partial move-dimension :y :vy)
-  ) ball)
-)
-  
+ 
 
 (def no-balls 1)
 (def ball-state (atom (take no-balls (repeatedly make-ball))))
