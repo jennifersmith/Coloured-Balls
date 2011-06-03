@@ -5,7 +5,8 @@
 (defn get-new-pos [displacement heading pos]
   (assoc
     pos
-    :y (* -1 (round (* (cos heading) displacement)))
+    :y (+ (:y pos) (* -1 (round (* (cos heading) displacement))))
+    :x (+ (:x pos) (* -1 (round (* (sin heading) displacement))))
   )
 )
 

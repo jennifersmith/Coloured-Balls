@@ -12,16 +12,16 @@
 ;; see effects immediately
 
 (defn draw-ball [ball]
+  (let [pos (:pos ball)]
 	(fill (:red ball) (:green ball) (:blue ball))
-	(ellipse (:x ball) (:y ball) (:radius ball) (:radius ball)))
-
+	(ellipse (:x pos) (:y pos) (:radius ball) (:radius ball)))
+  )
 (defn make-random-ball []
 	{:x (rand-int 400) :y (rand-int 400) :red (rand-int 256) :blue (rand-int 256) :green (rand-int 256) :radius (+ 1 (rand-int 70))})
 
 (defn make-ball []
-	{:x 200 :y 200 :red 250 :blue 150 :green 256 :radius 45 :vx 2 :vy 2})
+	{:pos {:x 200 :y 200} :heading 35 :red 250 :blue 150 :green 256 :radius 45 :velocity 2})
 
- 
 
 (def no-balls 1)
 (def ball-state (atom (take no-balls (repeatedly make-ball))))
@@ -31,7 +31,6 @@
   (background 150)
   (swap! ball-state #(map move-ball  %))
 	(doall (map draw-ball @ball-state))
-  
   )
 
 (defn setup []
