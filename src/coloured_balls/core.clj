@@ -5,22 +5,30 @@
         [rosado.processing.applet])
   (:gen-class))
 
-(defmacro dbg[x] `(let [x# ~x] (println '~x "=" x#) x#))
 ;; here's a function which will be called by Processing's (PApplet)
 ;; draw method every frame. Place your code here. If you eval it
 ;; interactively, you can redefine it while the applet is running and
 ;; see effects immediately
 
-(defn draw-ball [ball]
-  (let [pos (:pos ball)]
-	(fill (:red ball) (:green ball) (:blue ball))
-	(ellipse (:x pos) (:y pos) (:radius ball) (:radius ball)))
+(defn animate [balls]
+  (let
+    [animate-ball (comp move-ball (partial detect-edge 400 400))]
+    (map animate-ball balls)
   )
+ )
+
+(defn draw-ball [ball]
+  (let [pos (:pos ball)
+        width (* (:radius ball) 2)
+        height width]
+	(fill (:red ball) (:green ball) (:blue ball))
+	(ellipse (:x pos) (:y pos) width height)
+  ))
 (defn make-random-ball []
 	{:x (rand-int 400) :y (rand-int 400) :red (rand-int 256) :blue (rand-int 256) :green (rand-int 256) :radius (+ 1 (rand-int 70))})
 
 (defn make-ball []
-	{:pos {:x 200 :y 200} :heading 35 :red 250 :blue 150 :green 256 :radius 45 :velocity 2})
+	{:pos {:x 200 :y 200} :heading 90 :red 250 :blue 150 :green 256 :radius 50 :velocity 2})
 
 
 (def no-balls 1)
@@ -29,7 +37,7 @@
 (defn draw
   []
   (background 150)
-  (swap! ball-state #(map move-ball  %))
+  (swap! ball-state animate)
 	(doall (map draw-ball @ball-state))
   )
 
